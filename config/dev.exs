@@ -74,3 +74,21 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+
+config :shoebox, :pow,
+  user: Shoebox.Users.User,
+  repo: Shoebox.Repo,
+  web_module: ShoeboxWeb,
+  extensions: [PowResetPassword],
+  controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
+  mailer_backend: ShoeboxWeb.PowMailer
+
+config :shoebox, :pow_assent,
+  providers: [
+    github: [
+      client_id: "replace",
+      client_secret: "replace",
+      strategy: Assent.Strategy.Github
+    ]
+  ]

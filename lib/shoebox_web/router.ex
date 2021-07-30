@@ -1,5 +1,8 @@
 defmodule ShoeboxWeb.Router do
   use ShoeboxWeb, :router
+  use Pow.Phoenix.Router
+  use PowAssent.Phoenix.Router
+  use Pow.Extension.Phoenix.Router, extensions: [PowResetPassword]
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -10,8 +13,35 @@ defmodule ShoeboxWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :browser_skip_csrf do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, {ShoeboxWeb.LayoutView, :root}
+    plug :put_secure_browser_headers
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  pipeline :protected do
+    plug Pow.Plug.RequireAuthenticated,
+      error_handler: Pow.Phoenix.PlugErrorHandler
+  end
+
+  scope "/" do
+    pipe_through :browser_skip_csrf
+
+    pow_assent_routes()
+    pow_assent_authorization_post_callback_routes()
+  end
+
+  scope "/" do
+    pipe_through :browser
+
+    pow_routes()
+    pow_extension_routes()
   end
 
   scope "/", ShoeboxWeb do
@@ -20,12 +50,19 @@ defmodule ShoeboxWeb.Router do
     live "/", PageLive, :index
   end
 
+  scope "/", ShoeboxWeb do
+    pipe_through [:browser, :protected]
+
+    # resources "/tasks", TaskController
+  end
+
+
   # Other scopes may use custom stacks.
   # scope "/api", ShoeboxWeb do
   #   pipe_through :api
   # end
 
-  # Enables LiveDashboard only for development
+  # Enables Liveuse Pow.Phoenix.RouterDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put
   # it behind authentication and allow only admins to access it.

@@ -93,6 +93,15 @@ defmodule ShoeboxWeb do
     end
   end
 
+  def mailer_view do
+    quote do
+      use Phoenix.View, root: "lib/shoebox_web/templates",
+                        namespace: ShoeboxWeb
+
+      use Phoenix.HTML
+    end
+  end
+
   @doc """
   When used, dispatch to the appropriate controller/view/etc.
   """
