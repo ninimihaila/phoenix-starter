@@ -1,4 +1,13 @@
-# Shoebox
+# Phoenix starter app
+
+## Description
+This is a starter app for Phoenix projects. Main features include:
+
+  * Frontend using Parcel builder
+  * Tailwind (s)css
+  * Registration and OAuth using Pow and PowAssent
+
+## Running the app
 
 To start your Phoenix server:
 
