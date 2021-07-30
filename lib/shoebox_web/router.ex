@@ -33,7 +33,6 @@ defmodule ShoeboxWeb.Router do
   scope "/" do
     pipe_through :browser_skip_csrf
 
-    pow_assent_routes()
     pow_assent_authorization_post_callback_routes()
   end
 
@@ -41,6 +40,7 @@ defmodule ShoeboxWeb.Router do
     pipe_through :browser
 
     pow_routes()
+    pow_assent_routes()
     pow_extension_routes()
   end
 
