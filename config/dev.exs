@@ -2,7 +2,7 @@ use Mix.Config
 
 # Configure your database
 config :shoebox, Shoebox.Repo,
-  username: "sabin",
+  username: "nini",
   password: "postgres",
   database: "shoebox_dev",
   hostname: "localhost",
